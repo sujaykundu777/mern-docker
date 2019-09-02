@@ -2,22 +2,31 @@ version: '3.7'
 
 services:
   # Express Server
-  api:
+  nodejs:
     # image: webapp-server
     build: 
       context: ./api
       dockerfile: Dockerfile
-    image: webapp-server
-    restart: always
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
     ports:
-      - "8080:8080"
+      - "80:8080"
     volumes:
-      - ./api:/api
-      - /api/node_modules
+      - ./api:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
     # depends_on:
     #    - mongodb
-    # networks: 
-    #   - webappnetwork
+
 
   # # REACT client 
   # client:
@@ -35,25 +44,34 @@ services:
   #     - api
   #   networks: 
   #     - webappnetwork
-
-
   
   # Mongodb database
-  # mongodb:
-  #   image: mongo
-  #   container_name: mongodb
-  #   volumes:
-  #     - ./data-node:/data/db
-  #   ports:
-  #     - 27017:27017
-  #   command: mongod --noauth --smallfiles
-  #   networks:
-  #     - webappnetwork
+  db:
+    image: mongo:4.1.8-xenial
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
+    #   ports:
+    #   - 27017:27017
+    # command: mongod --noauth --smallfiles
+    # networks:
+    #   - webappnetwork
 
-  # networks:
-  # webappnetwork:
-  #   driver: bridge
+  networks:
+    app-network:
+      driver: bridge
    
+  volumes: 
+    dbdata:
+    node_modules:
+    
   # # Nginx Load Balancer
   # nginx:
   #   image: nginx:1.13.3-alpine
