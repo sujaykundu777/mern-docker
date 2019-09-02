@@ -19,34 +19,16 @@ services:
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB
     ports:
-      - "80:8080"
+      - "8080:8080"
     volumes:
       - ./api:/home/node/app
       - node_modules:/home/node/app/node_modules
     networks:
-      - webappnetwork
+      - app-network
     depends_on:
       - db
 
-
-  # # REACT client 
-  # client:
-  #   # image: webapp-client:latest
-  #   build: 
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   image: webapp-client
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./client:/var/www/app
-  #   links:
-  #     - api
-  #   networks: 
-  #     - webappnetwork
-  
-  # Mongodb database
+   # Mongodb database
   db:
     image: mongo:4.1.8-xenial
     container_name: db
@@ -58,37 +40,64 @@ services:
     volumes:
       - dbdata:/data/db
     networks:
-      - webappnetwork
+      - app-network
     #   ports:
     #   - 27017:27017
     # command: mongod --noauth --smallfiles
     # networks:
-    #   - webappnetwork
+    #   - appnetwork
+
+  # REACT client 
+  client:
+    # image: webapp-client:latest
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    image: webapp-client
+    container_name: webapp-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./client:/var/www/app
+    links:
+      - nodejs
+    networks: 
+      - app-network
+
+  # # Nginx Load Balancer
+  # webserver:
+  #   # image: nginx:latest
+  #   build:
+  #     context: ./client
+  #   container_name: webserver
+  #   restart: unless-stopped
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   links:
+  #     - client
+  #   volumes:
+  #     - web-root:/var/www/html
+  #     - ./nginx-conf:/etc/nginx/nginx.conf
+  #     # - certbot-etc:/etc/letsencrypt
+  #     # - certbot-var:/var/lib/letsencrypt
+  #   depends_on:
+  #     - nodejs
+  #   networks:
+  #     - app-network
 
 networks:
-    webappnetwork:
+    app-network:
         driver: bridge
    
 volumes: 
     dbdata:
     node_modules:
+    web-root:
+      driver: local
     
-  # # Nginx Load Balancer
-  # nginx:
-  #   image: nginx:1.13.3-alpine
-  #   container_name: Nginx
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   links:
-  #     - client
-  #   volumes:
-  #     - ./nginx:/etc/nginx/conf.d/default.conf:ro
-  #       #   - web-root:/var/www/html
-  #   #   # - certbot-etc:/etc/letsencrypt
-  #   #   # - certbot-var:/var/lib/letsencrypt
-  #   networks:
-  #     - webappnetwork
+
 
 # Letsencrypy certbot configurations
   # certbot:
@@ -101,16 +110,3 @@ volumes:
   #   depends_on:
   #     - webserver
   #   command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --staging -d example.com  -d www.example.com 
-
-  
-
-# volumes:
-#   certbot-etc:
-#   certbot-var:
-#   web-root:
-#     driver: local
-#     driver_opts:
-#       type: none
-#       device: /home/sammy/node_project/views/
-#       o: bind
-

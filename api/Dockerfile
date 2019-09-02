@@ -2,16 +2,18 @@
 
 FROM node:10.16-alpine
 
-WORKDIR /var/www/mern-app/api
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-# Add package.json
-ADD package*.json /var/www/mern-app/api
+WORKDIR /home/node/app
 
-# Install dependencies 
-RUN cd /var/www/mern-app/api & npm install
+COPY package*.json ./
+
+USER node
+
+RUN npm install
 
 # copy local files to app folder
-COPY . /var/www/mern-app/api/
+COPY --chown=node:node . .
 
 EXPOSE 8080
 
