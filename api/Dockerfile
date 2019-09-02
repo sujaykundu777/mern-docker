@@ -2,16 +2,16 @@
 
 FROM node:10.16-alpine
 
-WORKDIR /var/www/api
+WORKDIR /var/www/mern-app/api
 
 # Add package.json
-ADD package*.json /var/www/api/
+ADD package*.json /var/www/mern-app/api
 
 # Install dependencies 
-RUN cd /var/www/api & npm install
+RUN cd /var/www/mern-app/api & npm install
 
 # copy local files to app folder
-COPY . /var/www/api/
+COPY . /var/www/mern-app/api/
 
 EXPOSE 8080
 

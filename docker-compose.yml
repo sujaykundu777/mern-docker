@@ -1,6 +1,7 @@
 version: '3.7'
 
 services:
+
   # Express Server
   nodejs:
     # image: webapp-server
@@ -10,7 +11,7 @@ services:
     image: nodejs
     container_name: nodejs
     restart: unless-stopped
-    env_file: .env
+    env_file: ./api/.env
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
       - MONGO_PASSWORD=$MONGO_PASSWORD
@@ -23,9 +24,9 @@ services:
       - ./api:/home/node/app
       - node_modules:/home/node/app/node_modules
     networks:
-      - app-network
-    # depends_on:
-    #    - mongodb
+      - webappnetwork
+    depends_on:
+      - db
 
 
   # # REACT client 
@@ -50,25 +51,25 @@ services:
     image: mongo:4.1.8-xenial
     container_name: db
     restart: unless-stopped
-    env_file: .env
+    env_file: ./api/.env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
     volumes:
       - dbdata:/data/db
     networks:
-      - app-network
+      - webappnetwork
     #   ports:
     #   - 27017:27017
     # command: mongod --noauth --smallfiles
     # networks:
     #   - webappnetwork
 
-  networks:
-    app-network:
-      driver: bridge
+networks:
+    webappnetwork:
+        driver: bridge
    
-  volumes: 
+volumes: 
     dbdata:
     node_modules:
     
