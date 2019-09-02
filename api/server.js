@@ -29,7 +29,7 @@ mongoose.set('debug', true);
 console.log(dbConnectionURL.LOCALURL);
 mongoose.connect(dbConnectionURL.LOCALURL, options);
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'Mongodb Connection Error:'));
 db.once('open', () => {
      // we're connected !
      console.log('Mongodb Connection Successful');
@@ -41,13 +41,14 @@ const app = express();
 // View engine setup
 app.engine('html', ejs.renderFile);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', ejs);
+app.set('view engine', 'ejs');
 
 // logging 
 app.use(logger("combined"));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Routes
