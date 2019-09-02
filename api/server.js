@@ -9,6 +9,7 @@ import dbConnectionURL from './config/db';
 
 // Routes
 import indexRouter from './routes';
+import userRouter from './routes/users';
 
 // mongoose options for connecting to mongodb
 const options = {
@@ -39,9 +40,9 @@ db.once('open', () => {
 const app = express();
 
 // View engine setup
+app.set('view engine', 'ejs');
 app.engine('html', ejs.renderFile);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 // logging 
 app.use(logger("combined"));
@@ -53,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Routes
 app.use('/', indexRouter);
+app.use('/users', userRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -60,7 +62,8 @@ app.use((req, res, next) => {
   });
   
 
-// error handler
+// devlopment error handler
+// stackstraces leaked to user
 app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
@@ -70,5 +73,12 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.render('error');
   });
+
+  // production error handler 
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.send(err);
+});
 
 export default app;
