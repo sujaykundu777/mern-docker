@@ -1,0 +1,97 @@
+version: '3.7'
+
+services:
+  # Express Server
+  api:
+    # image: webapp-server
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    image: webapp-server
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api:/api
+      - /api/node_modules
+    # depends_on:
+    #    - mongodb
+    # networks: 
+    #   - webappnetwork
+
+  # # REACT client 
+  # client:
+  #   # image: webapp-client:latest
+  #   build: 
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   image: webapp-client
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./client:/var/www/app
+  #   links:
+  #     - api
+  #   networks: 
+  #     - webappnetwork
+
+
+  
+  # Mongodb database
+  # mongodb:
+  #   image: mongo
+  #   container_name: mongodb
+  #   volumes:
+  #     - ./data-node:/data/db
+  #   ports:
+  #     - 27017:27017
+  #   command: mongod --noauth --smallfiles
+  #   networks:
+  #     - webappnetwork
+
+  # networks:
+  # webappnetwork:
+  #   driver: bridge
+   
+  # # Nginx Load Balancer
+  # nginx:
+  #   image: nginx:1.13.3-alpine
+  #   container_name: Nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   links:
+  #     - client
+  #   volumes:
+  #     - ./nginx:/etc/nginx/conf.d/default.conf:ro
+  #       #   - web-root:/var/www/html
+  #   #   # - certbot-etc:/etc/letsencrypt
+  #   #   # - certbot-var:/var/lib/letsencrypt
+  #   networks:
+  #     - webappnetwork
+
+# Letsencrypy certbot configurations
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - certbot-etc:/etc/letsencrypt
+  #     - certbot-var:/var/lib/letsencrypt
+  #     - web-root:/var/www/html
+  #   depends_on:
+  #     - webserver
+  #   command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --staging -d example.com  -d www.example.com 
+
+  
+
+# volumes:
+#   certbot-etc:
+#   certbot-var:
+#   web-root:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/sammy/node_project/views/
+#       o: bind
+
