@@ -2,9 +2,21 @@
 
 To run the entire MERN Stack app using single command:
 
+Create a .env file with the environment variables in the root directory :
+
+```
+MONGO_USERNAME=sammy
+MONGO_PASSWORD=password
+MONGO_HOSTNAME=127.0.0.1
+MONGO_PORT=27017
+MONGO_DB=mern_docker_db
+```
+
+Then run,
+
 `$ docker-compose up`
 
-And should start the app at http://localhost:80
+And should start the client at http://localhost:80 and backend at http://localhost:8080
 
 # Client Config 
 

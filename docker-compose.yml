@@ -1,69 +1,80 @@
 version: '3.7'
 
 services:
-
-  # Express Server
-  nodejs:
-    # image: webapp-server
-    build: 
-      context: ./api
-      dockerfile: Dockerfile
-    image: nodejs
-    container_name: nodejs
-    restart: unless-stopped
-    env_file: ./api/.env
-    environment:
-      - MONGO_USERNAME=$MONGO_USERNAME
-      - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=db
-      - MONGO_PORT=$MONGO_PORT
-      - MONGO_DB=$MONGO_DB
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./api:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    networks:
-      - app-network
-    depends_on:
-      - db
-
-   # Mongodb database
-  db:
-    image: mongo:4.1.8-xenial
-    container_name: db
-    restart: unless-stopped
-    env_file: ./api/.env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
-    volumes:
-      - dbdata:/data/db
-    networks:
-      - app-network
-    #   ports:
-    #   - 27017:27017
-    # command: mongod --noauth --smallfiles
-    # networks:
-    #   - appnetwork
-
-  # REACT client 
-  client:
+    # REACT client 
+  react:
     # image: webapp-client:latest
     build: 
       context: ./client
       dockerfile: Dockerfile
     image: webapp-client
-    container_name: webapp-client
-    restart: unless-stopped
+    container_name: react
+    restart: always
     ports:
       - "80:80"
     volumes:
       - ./client:/var/www/app
     links:
-      - nodejs
+      - node
     networks: 
       - app-network
+
+  # Express Server
+  node:
+    # image: webapp-server
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    image: webapp-server
+    container_name: node
+    restart: unless-stopped
+    volumes:
+      - ./api:/opt/node_app/app
+      - /opt/node_app/app/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    networks:
+      - app-network
+
+
+  # Mongodb database
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGO_DB
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+networks:
+    app-network:
+        driver: bridge
+   
+volumes: 
+    data-volume:
+    node_modules:
+    web-root:
+      driver: local
+
+
+
 
   # # Nginx Load Balancer
   # webserver:
@@ -86,18 +97,6 @@ services:
   #     - nodejs
   #   networks:
   #     - app-network
-
-networks:
-    app-network:
-        driver: bridge
-   
-volumes: 
-    dbdata:
-    node_modules:
-    web-root:
-      driver: local
-    
-
 
 # Letsencrypy certbot configurations
   # certbot:

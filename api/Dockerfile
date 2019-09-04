@@ -2,18 +2,14 @@
 
 FROM node:10.16-alpine
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+WORKDIR /opt/node_app
 
-WORKDIR /home/node/app
-
+# USER node
 COPY package*.json ./
-
-USER node
 
 RUN npm install
 
-# copy local files to app folder
-COPY --chown=node:node . .
+COPY . .
 
 EXPOSE 8080
 

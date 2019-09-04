@@ -10,8 +10,6 @@ import './config/db';
 import indexRouter from './routes';
 import userRouter from './routes/users';
 
-
-
 // Initialize app
 const app = express();
 
