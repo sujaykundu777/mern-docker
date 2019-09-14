@@ -42,17 +42,28 @@ router.get('/', (req, res, next) => {
 
 
 /* Add a New User */
+/**
+ * @api {post} /users Add New User
+ * @apiParam {name} Name of the user 
+ * @apiParam {gender} Gender of the user 
+ * @apiParam {email}  Email of the user 
+ * @apiParam {password} Password of the user
+ * @apiParam {role} Role of the user [User, Admin]
+ * @apiSuccess {Object} 
+ * @apiError {String} Error 
+ */
 router.post('/', (req, res, next) => {
     try {
 
-          // create a song object
       const user = new User({
         name: req.body.name,
         gender: req.body.gender,
-        email: req.body.email
+        email: req.body.email,
+        password: req.body.password,
+        role: req.body.role
        });
 
-        user.save((err, result) => {
+       user.save((err, result) => {
             if(err){
                 res.status(404).send(err)
             }
@@ -69,7 +80,6 @@ router.post('/', (req, res, next) => {
         throw (err);
     }
   });
-
 
   
 /* Edit a User */

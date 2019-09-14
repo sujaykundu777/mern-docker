@@ -24,13 +24,14 @@ services:
     # image: webapp-server
     build: 
       context: ./api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    # dockerfile: Dockerfile.prod
     image: webapp-server
     container_name: node
     restart: unless-stopped
     volumes:
-      - ./api:/opt/node_app/app
-      - /opt/node_app/app/node_modules
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
     ports:
       - "8080:8080"
     depends_on:

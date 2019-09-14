@@ -27,7 +27,7 @@ const dbConnectionURL = {
     //'LOCALURL': `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`
     'LOCALURL': `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`
 };
-console.log('db connection', dbConnectionURL.LOCALURL);
+//console.log('db connection', dbConnectionURL.LOCALURL);
 mongoose.set('debug', true);
 mongoose.connect(dbConnectionURL.LOCALURL, options);
 const db = mongoose.connection;

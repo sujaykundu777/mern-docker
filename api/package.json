@@ -10,6 +10,7 @@
         "express"
     ],
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.4",
         "debug": "^4.1.1",
         "dotenv": "^8.1.0",
@@ -17,13 +18,16 @@
         "esm": "^3.2.25",
         "express": "^4.16.4",
         "http-errors": "^1.7.3",
+        "jsonwebtoken": "^8.5.1",
         "moment": "^2.24.0",
         "mongoose": "^5.6.11",
-        "morgan": "^1.9.1"
+        "morgan": "^1.9.1",
+        "passport": "^0.4.0",
+        "passport-jwt": "^4.0.0"
     },
     "scripts": {
-        "start": "node start.js",
-        "dev": "nodemon start.js"
+        "server": "node start.js",
+        "dev": "nodemon -L start.js"
     },
     "devDependencies": {
         "nodemon": "^1.19.1"
