@@ -1,62 +1,20 @@
 version: '3.7'
-
 services:
-    # REACT client 
-  react:
-    # image: webapp-client:latest
-    build: 
-      context: ./client
+  web:
+    build:
+      context: .
       dockerfile: Dockerfile
-    image: webapp-client
-    container_name: react
-    restart: always
-    ports:
-      - "80:80"
-    volumes:
-      - ./client:/var/www/app
-    links:
-      - node
-    networks: 
-      - app-network
-
-  # Express Server
-  node:
-    # image: webapp-server
-    build: 
-      context: ./api
-      dockerfile: Dockerfile.dev
-    # dockerfile: Dockerfile.prod
-    image: webapp-server
-    container_name: node
-    restart: unless-stopped
-    volumes:
-      - ./api:/usr/src/app
-      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
     ports:
       - "8080:8080"
-    depends_on:
-      - mongodb
-    env_file: .env
+    # env_file: ./server/.env # TODO - uncomment this to auto-load your .env file!
     environment:
-      - MONGO_USERNAME=$MONGO_USERNAME
-      - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=$MONGO_HOSTNAME
-      - MONGO_PORT=$MONGO_PORT
-      - MONGO_DB=$MONGO_DB
+      NODE_ENV: production
+    depends_on:
+      - mongo
     networks:
       - app-network
-
-
-  # Mongodb database
-  mongodb:
+  mongo:
     image: mongo
-    container_name: mongodb
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
-      - MONGO_INITDB_DATABASE=$MONGO_DB
     volumes:
       - data-volume:/data/db
     ports:
@@ -67,46 +25,9 @@ services:
 networks:
     app-network:
         driver: bridge
-   
-volumes: 
+
+volumes:
     data-volume:
     node_modules:
     web-root:
       driver: local
-
-
-
-
-  # # Nginx Load Balancer
-  # webserver:
-  #   # image: nginx:latest
-  #   build:
-  #     context: ./client
-  #   container_name: webserver
-  #   restart: unless-stopped
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   links:
-  #     - client
-  #   volumes:
-  #     - web-root:/var/www/html
-  #     - ./nginx-conf:/etc/nginx/nginx.conf
-  #     # - certbot-etc:/etc/letsencrypt
-  #     # - certbot-var:/var/lib/letsencrypt
-  #   depends_on:
-  #     - nodejs
-  #   networks:
-  #     - app-network
-
-# Letsencrypy certbot configurations
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-  #     - web-root:/var/www/html
-  #   depends_on:
-  #     - webserver
-  #   command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --staging -d example.com  -d www.example.com 
