@@ -9,7 +9,6 @@ WORKDIR /usr/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install react-scripts -g
 RUN npm install
 
 # copy local files to app folder
@@ -17,4 +16,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn","start"]
+CMD ["npm","start"]
