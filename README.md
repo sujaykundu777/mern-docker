@@ -1,21 +1,5 @@
 ## MERN-Docker - Starter for building MERN Apps using Docker
 
-A Full Stack MERN BLOG APP built using :
-
-Docker
-Nodejs
-Express
-ES6+ -  https://github.com/lukehoban/es6features
-Typescript
-Babel and babel-loader
-Webpack
-Mongodb
-React
-Redux
-Tailwind CSS
-Jest
-
-
 ![MERN DOCKER diagram](https://github.com/sujaykundu777/mern-docker/blob/master/3-tier-diagram.png?raw=true)
 ### Prerequisites:
 
@@ -33,7 +17,7 @@ Run the app using :
 
 `$ docker-compose up --build --remove-orphans`
 
-or 
+or
 
 `$ docker-compose up -d`
 
