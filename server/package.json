@@ -1,19 +1,37 @@
 {
-  "name": "myapp",
-  "version": "1.0.0",
-  "description": "Myapp Server",
-  "main": "server.js",
+  "name": "server",
+  "version": "1.0.1",
+  "description": "Myapp Server built using node, express",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev-bundle": "webpack --mode development",
+    "dev-server": "webpack serve --mode development",
+    "dev-build": "babel src/index.js -d dist",
+    "start": "npm run dev-build && nodemon dist/index.js",
+    "build": "webpack --mode production"
   },
-  "author": "",
+  "author": "xplor4r",
+  "repository": "https://github.com/sujaykundu777/mern-docker",
+  "author_uri": "https://hack4r.com",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "core-js": "^3.8.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.8.11",
-    "nodemon": "^2.0.2"
+    "mongoose": "^5.11.9",
+    "nodemon": "^2.0.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1",
+    "webpack-node-externals": "^2.5.2"
   }
 }

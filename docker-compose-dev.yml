@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     image: myapp-client
     container_name: myapp-react-client
-    command: yarn start
+    command: yarn build
     volumes:
       - ./client/:/usr/app
       - /usr/app/node_modules

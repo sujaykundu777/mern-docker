@@ -92,4 +92,4 @@ postRouter.delete("/:post_id", (req, res, next) => {
   });
 });
 
-module.exports = postRouter;
+export default postRouter;
