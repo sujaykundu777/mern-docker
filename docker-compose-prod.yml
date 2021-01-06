@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    # env_file: ./server/.env # TODO - uncomment this to auto-load your .env file!
+    env_file: ./server/.env
     environment:
       NODE_ENV: production
     depends_on:

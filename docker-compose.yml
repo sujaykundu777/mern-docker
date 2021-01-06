@@ -22,9 +22,6 @@ services:
       - app-network
   mongo:
     image: mongo:latest
-    environment: 
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
     volumes:
       - data-volume:/data/db
     ports:

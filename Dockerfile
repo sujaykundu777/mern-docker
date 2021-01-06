@@ -15,7 +15,7 @@ RUN npm install
 COPY client/ ./
 RUN ls
 
-RUN npm build
+RUN npm run build
 
 # Stage 2 : Build Server
 

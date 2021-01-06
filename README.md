@@ -13,6 +13,8 @@ Article - ![Tutorial](https://dev.to/sujaykundu777/utilizing-the-power-of-docker
 
 First copy the content of **docker-compose-dev.yml** to **docker-compose.yml**
 
+and also copy the content of **server/src/index.dev.js** to **server/src/index.js**
+
 Run the app using :
 
 `$ docker-compose up --build --remove-orphans`
@@ -41,15 +43,13 @@ To check the status of the running containers :
 
 First copy the content of **docker-compose-prod.yml** to **docker-compose.yml**
 
+and also copy the content of **server/src/index.prod.js** to **server/src/index.js**
+
 Run the app using :
 
 ` $ docker-compose up --build -remove-orphans`
 
-
-
 The App should be up at http://localhost:8080
-
-
 
 ### Build the image for server :
 docker build -t myapp-server:1 .

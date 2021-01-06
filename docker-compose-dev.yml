@@ -1,4 +1,3 @@
-# For development environment
 version: '3.9'
 
 services:
@@ -23,9 +22,9 @@ services:
       - app-network
   mongo:
     image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    # environment:  // If Mongo Authorization is need to be enabled
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: rootpassword
     volumes:
       - data-volume:/data/db
     ports:

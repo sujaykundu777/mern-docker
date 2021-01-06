@@ -1,20 +1,12 @@
 // server.js
-import express from 'express';
-import path from 'path';
 import bodyParser from 'body-parser';
-// import './config/mongodb.config';
-// import postRouter from './routes/post.router';
+import express from 'express';
+import router from '././routes';
+import postRouter from '././routes/post.routes';
+import './config/mongodb.config';
 
 const app = express();
 const PORT = 8080;
-
-// Our DB Configuration
-//require('./src/database');
-
-// Routes
-//const postRouter = require('./routes/post.router.js');
-
-// const CLIENT_BUILD_PATH = path.join(__dirname, "../../client/build");
 
 app.use(
   bodyParser.urlencoded({
@@ -23,32 +15,12 @@ app.use(
 );
 app.use(bodyParser.json());
 
-// Static files
-// app.use(express.static(CLIENT_BUILD_PATH));
+app.use('/api', router);
+app.use('/api/posts', postRouter);
 
-// Server API's
-// app.use('/api/posts', postRouter);
-
-// send the frontend react
-// app.get('/', (req, res) => {
-//   res.status(200).send('Hello World !');
-// })
-
-
-// Server React Client
-// app.get("/", function(req, res) {
-//   res.sendFile(path.join(CLIENT_BUILD_PATH , "index.html"));
-// });
-
-
-app.get('/', (req, res) => {
-  res.status(200).send("API Gateway");
-})
-
-
-app.get('/abc', function(req, res){
-  res.send('Hello world again');
-})
+app.get('/', function(req, res){
+  res.send('Hello ! from the Server ');
+});
 
 app.listen(PORT, function () {
     console.log(`Server Listening on ${PORT}`);
